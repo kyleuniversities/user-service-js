@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ViewUsersPage } from './app/component/ViewUsersPage';
+import { ViewUsersPage } from './app/component/user/ViewUsersPage';
 
 function App() {
   return (

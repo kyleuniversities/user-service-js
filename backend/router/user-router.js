@@ -25,7 +25,7 @@ router.use(
 
 // Prepare logging functionality for each request
 router.use(function (req, res, next) {
-  console.log(`REQUEST: ${req.originalUrl}`);
+  console.log(`REQUEST: ${req.method} ${req.originalUrl}`);
   console.log(` TIME: ${new Date().toISOString()}`);
   next();
 });

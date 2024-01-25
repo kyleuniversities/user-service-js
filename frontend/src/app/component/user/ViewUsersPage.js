@@ -29,6 +29,15 @@ export class ViewUsersPage extends React.Component {
         <div className="user-page-container">
           <h1>Users:</h1>
           <p>Number of Users: {this.state.users.length}</p>
+          <button
+            type="button"
+            onClick={() => {
+              window.location.assign(`/registration`);
+            }}
+          >
+            New User
+          </button>
+          <br />
           <br />
           {this.state.users.map((user) => (
             <ViewUserCard user={user} />

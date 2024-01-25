@@ -75,7 +75,6 @@ export class EditUserPage extends React.Component {
               }
             />
           </form>
-          <p>{JSON.stringify(this.state.user)}</p>
         </div>
       </SitePage>
     );

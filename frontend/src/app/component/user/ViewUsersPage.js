@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { loadUsers } from '../../service/user';
+import { deleteUser, loadUsers } from '../../service/user';
 import './index.css';
 import { SitePage } from '../SitePage';
 
@@ -26,7 +26,7 @@ export class ViewUsersPage extends React.Component {
   render() {
     return (
       <SitePage>
-        <div className="view-users-container">
+        <div className="user-page-container">
           <h1>Users:</h1>
           <p>Number of Users: {this.state.users.length}</p>
           <br />
@@ -52,9 +52,31 @@ export class ViewUserCard extends React.Component {
         <p>
           <b>Email:</b> {this.props.user.email}
         </p>
-        <p>
-          <b>Id:</b> {this.props.user.id}
-        </p>
+        <ViewUserCardControlContainer user={this.props.user} />
+      </div>
+    );
+  }
+}
+
+/**
+ * Control Container for a User
+ */
+export class ViewUserCardControlContainer extends React.Component {
+  render() {
+    return (
+      <div className="view-user-card-control-container">
+        <button
+          type="button"
+          onClick={() => {
+            window.location.assign(`/users/edit/${this.props.user.id}`);
+          }}
+        >
+          Edit User
+        </button>
+        &nbsp;&nbsp;
+        <button type="button" onClick={() => deleteUser(this.props.user.id)}>
+          Delete User
+        </button>
       </div>
     );
   }

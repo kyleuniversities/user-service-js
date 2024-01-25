@@ -78,3 +78,19 @@ export async function updateUser(id, username, email) {
     window.location.assign(`/`);
   });
 }
+
+/**
+ * DELETE Method
+ * Deletes a user
+ */
+export async function deleteUser(id) {
+  // Set up request options
+  const options = {
+    method: 'DELETE',
+  };
+
+  // Run request
+  return await request(`/users/${id}`, options).then((user) => {
+    window.location.assign(`/`);
+  });
+}

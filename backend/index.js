@@ -3,9 +3,15 @@ const cors = require('cors');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
+const knexfile = require('./knexfile');
+const { Model } = require('objection');
 
 // Set up express
 const app = express();
+
+// Set up knex
+const knex = require('knex')(knexfile.development);
+Model.knex(knex);
 
 // Set up express middleware
 app.use(jsonParser);
@@ -25,6 +31,9 @@ router.get('/test', function (req, res) {
 router.post('/test', function (req, res) {
   return res.send(`Post Hello World!`);
 });
+
+// Mount routes
+app.use('/users/', require('./router/user-router'));
 
 // Launch app
 app.listen(port, () => {

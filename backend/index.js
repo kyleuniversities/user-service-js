@@ -33,7 +33,7 @@ router.post('/test', function (req, res) {
 });
 
 // Mount routes
-app.use('/users/', require('./router/user-router'));
+app.use('/api/users/', require('./router/user-router'));
 
 // Launch app
 app.listen(port, () => {

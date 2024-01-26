@@ -2,7 +2,7 @@ import axios from 'axios';
 import { debugAlert } from './debugAlert';
 
 // Defautl api host for requests
-export const DEFAULT_HOST = 'http://localhost:5000';
+export const DEFAULT_HOST = 'http://localhost:5000/api';
 
 /**
  * Utility function for finding the api host

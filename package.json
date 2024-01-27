@@ -1,0 +1,23 @@
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "User Service JS is a simple project to review my Full Stack experience in ReactJS and NodeJS, as well as get some hands-on experience in AWS Elastic Beanstalk.",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm -C backend run start-pm2 && npm -C frontend start",
+    "start-x": "npm -C backend start | npm -C frontend start",
+    "start-backend": "npm -C backend start",
+    "echo": "echo \"Hello World!\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyleuniversities/user-service-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kyleuniversities/user-service-js/issues"
+  },
+  "homepage": "https://github.com/kyleuniversities/user-service-js#readme"
+}

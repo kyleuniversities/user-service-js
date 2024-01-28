@@ -7,6 +7,7 @@
     "start": "npm -C backend run start-pm2 && npm -C frontend start",
     "start-x": "npm -C backend start | npm -C frontend start",
     "start-backend": "npm -C backend start",
+    "preinstall": "npm -C backend install && npm -C frontend install",
     "echo": "echo \"Hello World!\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

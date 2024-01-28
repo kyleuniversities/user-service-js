@@ -1,0 +1,18 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "user-service-js",
+            "image": "kyleuniversities/user-service-js:_latest_tag",
+            "essential": true,
+            "memory": 512,
+            "portMappings": [
+                {
+                    "hostPort": 3000,
+                    "containerPort": 3000
+                }
+            ],
+            "environment": []
+        }
+    ]
+}

@@ -40,7 +40,7 @@ jobs:
         run: docker build . -t kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }} --progress=plain --no-cache
 
       - name: Push Docker Image
-        run: docker push kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }} --progress=plain --no-cache
+        run: docker push kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }}
 
       - name: Update Dockerrun.aws.json with Build Tag
         run: sed -i -e "s/_latest_tag/${{ steps.build-tag.outputs.BUILD_TAG }}/g" ./Dockerrun.aws.json

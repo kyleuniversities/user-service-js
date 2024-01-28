@@ -39,13 +39,13 @@ jobs:
       - name: Build Docker Image
         run: docker build . -t kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }} --progress=plain --no-cache
 
-        - name: Push Docker Image
-        run: docker push kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }} --progress=plain --no-cache 
+      - name: Push Docker Image
+        run: docker push kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }} --progress=plain --no-cache
 
-        - name: Update Dockerrun.aws.json with Build Tag
-        run: sed -i -e "s/_latest_tag/${{ steps.build-tag.outputs.BUILD_TAG }}/g" ./Dockerrun.aws.json 
+      - name: Update Dockerrun.aws.json with Build Tag
+        run: sed -i -e "s/_latest_tag/${{ steps.build-tag.outputs.BUILD_TAG }}/g" ./Dockerrun.aws.json
 
-        - name: Deploy to Elastic Beanstalk
+      - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -57,5 +57,3 @@ jobs:
           region: ${{ secrets.EB_REGION }}
           deployment_package: Dockerrun.aws.json
           wait_for_environment_recovery: 60
-          
-

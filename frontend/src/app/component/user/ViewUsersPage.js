@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { deleteUser, loadUsers } from '../../service/user';
 import './index.css';
 import { SitePage } from '../SitePage';

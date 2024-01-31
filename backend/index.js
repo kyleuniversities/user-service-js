@@ -20,20 +20,21 @@ app.use(cors());
 app.use('/', router);
 
 // Set up port data
-port = 5000;
+port = 8080;
 
 // Set up test GET endpoint
-router.get('/test', function (req, res) {
+router.get('/api/test', function (req, res) {
   return res.send(`Get Hello World!`);
 });
 
 // Set up test POST endpoint
-router.post('/test', function (req, res) {
+router.post('/api/test', function (req, res) {
   return res.send(`Post Hello World!`);
 });
 
 // Mount routes
 app.use('/api/users/', require('./router/user-router'));
+app.use('/', require('./web-router'));
 
 // Launch app
 app.listen(port, () => {

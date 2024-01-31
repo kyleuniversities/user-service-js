@@ -17,43 +17,48 @@ jobs:
       - name: Checkout Git Branch
         uses: actions/checkout@v2
 
-      - name: Set up Backend Environment
-        run: |
-          cp ./backend/env-template.txt ./backend/.env
-          sed -i -e "s/_DATABASE_HOST/${{ secrets.DATABASE_HOST }}/g" ./backend/.env
-          sed -i -e "s/_DATABASE_USERNAME/${{ secrets.DATABASE_USERNAME }}/g" ./backend/.env
-          sed -i -e "s/_DATABASE_PASSWORD/${{ secrets.DATABASE_PASSWORD }}/g" ./backend/.env
-          sed -i -e "s/_DATABASE_DATABASE/${{ secrets.DATABASE_DATABASE }}/g" ./backend/.env
-          cat ./backend/.env
-
       - name: Set Build Tag
         id: build-tag
         run: echo "BUILD_TAG=$(date '+%Y.%m.%d.%H.%M.%S')" >> $GITHUB_OUTPUT
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Install Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          node-version: ${{ matrix.node-version }}
 
-      - name: Build Docker Image
-        run: docker build . -t kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }} --progress=plain --no-cache
+      - name: Set Up Backend App
+        run: |
+          cd backend
+          npm install
+          cp env-template.txt .env
+          sed -i -e "s/_DATABASE_HOST/${{ secrets.DATABASE_HOST }}/g" .env
+          sed -i -e "s/_DATABASE_PORT/${{ secrets.DATABASE_PORT }}/g" .env
+          sed -i -e "s/_DATABASE_USERNAME/${{ secrets.DATABASE_USERNAME }}/g" .env
+          sed -i -e "s/_DATABASE_PASSWORD/${{ secrets.DATABASE_PASSWORD }}/g" .env
+          sed -i -e "s/_DATABASE_DATABASE/${{ secrets.DATABASE_DATABASE }}/g" .env
+          cd ..
 
-      - name: Push Docker Image
-        run: docker push kyleuniversities/user-service-js:${{ steps.build-tag.outputs.BUILD_TAG }}
+      - name: Set Up Frontend App
+        run: |
+          cd frontend
+          npm install
+          cp env-template.txt .env
+          cat .env
+          sed -i -e "s/_REACT_APP_API_FULL_HOST/${{ secrets.REACT_APP_API_FULL_HOST }}/g" .env
+          npm run build
+          cd ..
 
-      - name: Update Dockerrun.aws.json with Build Tag
-        run: sed -i -e "s/_latest_tag/${{ steps.build-tag.outputs.BUILD_TAG }}/g" ./Dockerrun.aws.json
+      - name: Zip deployment
+        run: zip -r deployment-${{ steps.build-tag.outputs.BUILD_TAG }}.zip .
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ${{ secrets.EB_APPLICATION_NAME }}
-          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
+          application_name: user-service-js
+          environment_name: user-service-js-env
           version_label: ${{ steps.build-tag.outputs.BUILD_TAG }}
-          version_description: ${{ github.SHA }}
-          region: ${{ secrets.EB_REGION }}
-          deployment_package: Dockerrun.aws.json
-          wait_for_environment_recovery: 60
+          version_description: ${{ steps.build-tag.outputs.BUILD_TAG }}
+          region: us-west-1
+          deployment_package: deployment-${{ steps.build-tag.outputs.BUILD_TAG }}.zip

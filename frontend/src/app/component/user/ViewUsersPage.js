@@ -27,16 +27,23 @@ export class ViewUsersPage extends React.Component {
     return (
       <SitePage>
         <div className="user-page-container">
-          <h1>Users:</h1>
-          <p>Number of Users: {this.state.users.length}</p>
-          <button
-            type="button"
-            onClick={() => {
-              window.location.assign(`/registration`);
-            }}
-          >
-            New User
-          </button>
+          <div className="user-page-menu-container">
+            <div className="user-page-controls-container">
+              <h1>Users:</h1>
+              <p>Number of Users: {this.state.users.length}</p>
+              <button
+                type="button"
+                onClick={() => {
+                  window.location.assign(`/registration`);
+                }}
+              >
+                New User
+              </button>
+            </div>
+            {/*<div className="user-page-user-data-container">
+              <h2>Guest</h2>
+              </div>*/}
+          </div>
           <br />
           <br />
           {this.state.users.map((user) => (

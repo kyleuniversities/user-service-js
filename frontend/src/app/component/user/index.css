@@ -5,6 +5,18 @@
     padding-bottom: 20px;
 }
 
+.user-page-controls-container {
+    
+}
+
+.user-page-menu-container {
+    display: inline-block;
+}
+
+.user-page-user-data-container {
+    float: right;
+}
+
 .view-user-card {
     padding-left: 10px;
     padding-right: 10px;

@@ -1,13 +1,17 @@
 import axios from 'axios';
 import { debugAlert } from './debugAlert';
 
-// Defautl api host for requests
+// Defautl api hosts for requests
 export const DEFAULT_HOST = 'http://localhost:5000/api';
+export const DEVELOPMENT_HOST = 'http://localhost:5000/api';
 
 /**
  * Utility function for finding the api host
  */
 export const deriveApiHost = () => {
+  if (process.env['REACT_APP_IS_DEVELOPING']) {
+    return DEVELOPMENT_HOST;
+  }
   return process.env['REACT_APP_API_FULL_HOST'] || DEFAULT_HOST;
 };
 

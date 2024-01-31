@@ -4,7 +4,8 @@
   "description": "User Service JS is a simple project to review my Full Stack experience in ReactJS and NodeJS, as well as get some hands-on experience in AWS Elastic Beanstalk.",
   "main": "index.js",
   "scripts": {
-    "start": "npm -C backend start"
+    "start": "npm -C backend start",
+    "dev-start": "set BACKEND_DEVELOPMENT_PORT=5000 && npm -C backend run dev-start && set REACT_APP_IS_DEVELOPING=true && npm -C frontend start"
   },
   "repository": {
     "type": "git",

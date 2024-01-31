@@ -20,7 +20,7 @@ app.use(cors());
 app.use('/', router);
 
 // Set up port data
-port = 8080;
+port = process.env['BACKEND_DEVELOPMENT_PORT'] || 8080;
 
 // Set up test GET endpoint
 router.get('/api/test', function (req, res) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { deleteUser, loadUsers } from '../../service/user';
 import './index.css';
 import { SitePage } from '../SitePage';
+import { AppContext } from '../../context/AppContextManager';
 
 /**
  * Page for Viewing Users
@@ -26,30 +27,49 @@ export class ViewUsersPage extends React.Component {
   render() {
     return (
       <SitePage>
-        <div className="user-page-container">
-          <div className="user-page-menu-container">
-            <div className="user-page-controls-container">
-              <h1>Users:</h1>
-              <p>Number of Users: {this.state.users.length}</p>
-              <button
-                type="button"
-                onClick={() => {
-                  window.location.assign(`/registration`);
-                }}
-              >
-                New User
-              </button>
+        <AppContext.Consumer>
+          {({
+            sessionUser,
+            setSessionUserFromLoginData,
+            removeSessionUserData,
+          }) => (
+            <div className="user-page-container">
+              <div className="user-page-menu-container">
+                <div className="user-page-controls-container">
+                  <h1>Users:</h1>
+                  <p>Number of Users: {this.state.users.length}</p>
+                  <div className="horizontal-button-list-container">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        window.location.assign(`/registration`);
+                      }}
+                    >
+                      New User
+                    </button>
+                    &nbsp;&nbsp;
+                    <button
+                      type="button"
+                      onClick={() => {
+                        window.location.assign(`/login`);
+                      }}
+                    >
+                      Login
+                    </button>
+                  </div>
+                </div>
+                <div className="user-page-user-data-container">
+                  <h1>{sessionUser.username}</h1>
+                </div>
+              </div>
+              <br />
+              <br />
+              {this.state.users.map((user) => (
+                <ViewUserCard user={user} />
+              ))}
             </div>
-            {/*<div className="user-page-user-data-container">
-              <h2>Guest</h2>
-              </div>*/}
-          </div>
-          <br />
-          <br />
-          {this.state.users.map((user) => (
-            <ViewUserCard user={user} />
-          ))}
-        </div>
+          )}
+        </AppContext.Consumer>
       </SitePage>
     );
   }
@@ -80,7 +100,7 @@ export class ViewUserCard extends React.Component {
 export class ViewUserCardControlContainer extends React.Component {
   render() {
     return (
-      <div className="view-user-card-control-container">
+      <div className="horizontal-button-list-container">
         <button
           type="button"
           onClick={() => {

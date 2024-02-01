@@ -24,7 +24,7 @@ export async function addUser(username, email, password) {
   // Set up request options
   const options = {
     method: 'POST',
-    data: JSON.stringify(body),
+    body: JSON.stringify(body),
   };
 
   // Run request
@@ -70,7 +70,7 @@ export async function updateUser(id, username, email) {
   // Set up request options
   const options = {
     method: 'PATCH',
-    data: JSON.stringify(body),
+    body: JSON.stringify(body),
   };
 
   // Run request

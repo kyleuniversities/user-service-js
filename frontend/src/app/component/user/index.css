@@ -1,3 +1,7 @@
+.horizontal-button-list-container {
+    display: inline-block;
+}
+
 .user-page-container {
     padding-left: 20px;
     padding-right: 20px;
@@ -6,15 +10,16 @@
 }
 
 .user-page-controls-container {
-    
+   float: left 
 }
 
 .user-page-menu-container {
     display: inline-block;
+    width: 100%;
 }
 
 .user-page-user-data-container {
-    float: right;
+    float: right    
 }
 
 .view-user-card {
@@ -24,8 +29,4 @@
     padding-bottom: 5px;
     margin-bottom: 10px;
     border: solid black 3px;
-}
-
-.view-user-card-control-container {
-    display: inline-block;
 }

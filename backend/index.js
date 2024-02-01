@@ -2,8 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const router = express.Router();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const jsonParser = bodyParser.json();
 const knexfile = require('./knexfile');
+const knexSessionStore = require('connect-session-knex')(session);
 const { Model } = require('objection');
 
 // Set up express
@@ -13,10 +16,33 @@ const app = express();
 const knex = require('knex')(knexfile.development);
 Model.knex(knex);
 
+// Set up parser middleware
+app.use(cookieParser());
+
+// Set up session middleware
+app.use(
+  session({
+    key: 'key123456',
+    store: new knexSessionStore({
+      knex: knex,
+      tablename: 'session',
+      sidfieldname: 'sid',
+      createtable: true,
+      clearInterval: 1000 * 60 * 60,
+    }),
+    secret: 'secret12345',
+    saveUninitialized: true,
+    resave: false,
+    cookie: {
+      httpOnly: true,
+      clearInterval: 1000 * 60 * 60,
+    },
+  })
+);
+
 // Set up express middleware
-app.use(jsonParser);
 app.use(express.json());
-app.use(cors());
+//app.use(cors());
 app.use('/', router);
 
 // Set up port data
@@ -34,6 +60,8 @@ router.post('/api/test', function (req, res) {
 
 // Mount routes
 app.use('/api/users/', require('./router/user-router'));
+app.use('/api/auth/', require('./router/auth-router'));
+app.use('/api/sessions/', require('./router/session-router'));
 app.use('/', require('./web-router'));
 
 // Launch app

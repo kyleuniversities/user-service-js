@@ -72,7 +72,6 @@ export class AppContextManager extends React.Component {
   // Render Method
   render() {
     const appContext = { ...this.state };
-    alert(`APP_CONTEXT: ${JSON.stringify(appContext)}`);
     return (
       <AppContext.Provider value={appContext}>
         {this.props.children}

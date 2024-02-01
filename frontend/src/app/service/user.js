@@ -49,9 +49,6 @@ export async function loadUsers(setUsers) {
  */
 export async function loadUser(id, setUser) {
   const user = await request(`/users/${id}`);
-  console.log(`id: ${id}`);
-  console.log(` setUser: ${setUser}`);
-  console.log(` user: ${JSON.stringify(user)}`);
   setUser(user);
   return user;
 }

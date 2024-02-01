@@ -3,47 +3,42 @@
  */
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
-const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { setUpRouterMiddleware, throwError } = require('../util/router-util');
+
+// Set up router middleware
+setUpRouterMiddleware(router);
 
 /**
- * Router setup methods
+ * Authentication API Helper Methods
  */
-// Prepare request body parser
-router.use(bodyParser.json());
+function userExistsWithPasswordMatch(matchingUsers, password) {
+  return (
+    matchingUsers.length === 0 ||
+    !bcrypt.compareSync(password, matchingUsers[0].password)
+  );
+}
 
-// Prepare CORS functionality
-router.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
+async function queryMatchingUser(username, password) {
+  const matchingUsers = await User.query().where('username', username);
+  if (userExistsWithPasswordMatch(matchingUsers, password)) {
+    throw new Error('Incorrect username or password');
+  }
+  return matchingUsers[0];
+}
 
-// Prepare logging functionality for each request
-router.use(function (req, res, next) {
-  console.log(`REQUEST: ${req.method} ${req.originalUrl}`);
-  console.log(` TIME: ${new Date().toISOString()}`);
-  next();
-});
-
-/**
- * Router helper methods
- */
-// Throws an Api Error
-function throwError(req, res, error, status = 500) {
-  return res.status(status).json({
-    class: 'ApiError',
-    message: error.message,
-    status,
-    time: new Date().toISOString(),
-    url: req.originalUrl,
-    method: req.method,
-    body: req.body,
-  });
+function collectSignedSessionToken(user) {
+  return jwt.sign(
+    {
+      sub: user.username,
+      username: user.username,
+      email: user.email,
+      id: user.id,
+    },
+    'secret123456'
+  );
 }
 
 /**
@@ -53,27 +48,9 @@ function throwError(req, res, error, status = 500) {
 // Logs in a user
 router.post(`/login`, async (req, res) => {
   try {
-    console.log(`LOGIN: ${JSON.stringify(req.body)}`);
-    const user = await User.query()
-      .where('username', req.body.username)
-      .first();
-    console.log(`user: ${JSON.stringify(user)}`);
-    if (!bcrypt.compareSync(req.body.password, user.password)) {
-      throw new Error('Incorrect username or password');
-    }
-    console.log(`BCRYPT_PASSED`);
-    const token = jwt.sign(
-      {
-        sub: user.username,
-        username: user.username,
-        email: user.email,
-        id: user.id,
-      },
-      'secret'
-    );
-    const loginResponse = { token };
-    console.log(`loginResponse: ${JSON.stringify(loginResponse)}`);
-    return res.send(loginResponse);
+    const user = await queryMatchingUser(req.body.username, req.body.password);
+    const token = collectSignedSessionToken(user);
+    return res.send({ token });
   } catch (error) {
     return throwError(req, res, error);
   }

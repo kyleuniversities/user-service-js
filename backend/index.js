@@ -1,20 +1,17 @@
 const express = require('express');
-const cors = require('cors');
 const router = express.Router();
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const jsonParser = bodyParser.json();
 const knexfile = require('./knexfile');
 const knexSessionStore = require('connect-session-knex')(session);
 const { Model } = require('objection');
 
-// Set up express
-const app = express();
-
 // Set up knex
 const knex = require('knex')(knexfile.development);
 Model.knex(knex);
+
+// Set up express
+const app = express();
 
 // Set up parser middleware
 app.use(cookieParser());
@@ -42,7 +39,6 @@ app.use(
 
 // Set up express middleware
 app.use(express.json());
-//app.use(cors());
 app.use('/', router);
 
 // Set up port data

@@ -1,6 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import { NULL_ID, newNullSessionUser } from '../context/AppContextManager';
-import { fullRequest, request, requestWithFullOptions } from './request';
+import { request } from './request';
 
 // Function for extracting user id from token
 const getId = (decodedToken) => {
@@ -16,20 +16,8 @@ const getId = (decodedToken) => {
  * Function to load the current session user
  */
 export const loadSessionUserRequest = async () => {
-  // Set up request options
-  const fullOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  };
-
   // Run request
-  return requestWithFullOptions(`/sessions`, fullOptions).then((data) => {
-    alert(`SESSION_LIST: ${JSON.stringify(data)}`);
-    //const session = data[0];
-    const session = data;
-
+  return request(`/sessions`).then((session) => {
     // Return a null session user if null data
     if (!session.token || session.token === '#null') {
       return newNullSessionUser();

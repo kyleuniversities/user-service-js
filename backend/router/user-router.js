@@ -3,48 +3,13 @@
  */
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
-const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const { setUpRouterMiddleware, throwError } = require('../util/router-util');
 
-/**
- * Router setup methods
- */
-// Prepare request body parser
-router.use(bodyParser.json());
-
-// Prepare CORS functionality
-router.use(
-  cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  })
-);
-
-// Prepare logging functionality for each request
-router.use(function (req, res, next) {
-  console.log(`REQUEST: ${req.method} ${req.originalUrl}`);
-  console.log(` TIME: ${new Date().toISOString()}`);
-  next();
-});
-
-/**
- * Router helper methods
- */
-// Throws an Api Error
-function throwError(req, res, error, status = 500) {
-  return res.status(status).json({
-    class: 'ApiError',
-    message: error.message,
-    status,
-    time: new Date().toISOString(),
-    url: req.originalUrl,
-    method: req.method,
-    body: req.body,
-  });
-}
+// Set up router middleware
+setUpRouterMiddleware(router);
 
 // Creates a User Update Request
 function toUserUpdateRequest(body) {

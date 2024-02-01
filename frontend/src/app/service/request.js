@@ -1,11 +1,4 @@
-import axios from 'axios';
 import { debugAlert } from './debugAlert';
-import { wrapper } from 'axios-cookiejar-support';
-import { CookieJar } from 'tough-cookie';
-
-// Set up wrapper for axios
-const cookieJar = new CookieJar();
-const axiosWrapper = wrapper(axios.create({ jar: cookieJar }));
 
 // Default api hosts for requests
 export const DEFAULT_HOST = 'http://localhost:5000/api';
@@ -34,8 +27,7 @@ export const request = async (url, options = {}) => {
   const fullOptions = {
     ...options,
     headers,
-    //mode: 'cors',
-    //credentials: 'include',
+    credentials: 'include',
   };
 
   // Set up headers
@@ -72,13 +64,4 @@ export const fullRequest = async (fullUrl, fullOptions) => {
       // Return the data from the response
       return data;
     });
-
-  // // Run API request
-  // return axiosWrapper(fullOptions).then((data) => {
-  //   // Debug check response data
-  //   debugAlert(`DATA: ${JSON.stringify(data)}`);
-
-  //   // Return the data from the response
-  //   return data.data;
-  // });
 };

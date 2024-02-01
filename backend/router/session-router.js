@@ -26,12 +26,27 @@ router.get(`/`, async (req, res) => {
 });
 
 // UPDATE Method
-// Updates a user by id
+// Appends the session with data
 router.patch(`/:id`, async (req, res) => {
   try {
     req.session.locals = req.body;
     req.session.save();
     return res.send(req.session.locals);
+  } catch (error) {
+    return throwError(req, res, error);
+  }
+});
+
+// DELETE Method
+// Destroys the session
+router.delete(`/:id`, async (req, res) => {
+  try {
+    req.session.destroy((error) => {
+      if (error) {
+        throw error;
+      }
+    });
+    return res.send({ message: 'User successfully logged out' });
   } catch (error) {
     return throwError(req, res, error);
   }

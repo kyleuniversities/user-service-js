@@ -3,6 +3,7 @@ import { deleteUser, loadUsers } from '../../service/user';
 import './index.css';
 import { SitePage } from '../SitePage';
 import { AppContext } from '../../context/AppContextManager';
+import { logoutRequest } from '../../service/auth';
 
 /**
  * Page for Viewing Users
@@ -48,14 +49,25 @@ export class ViewUsersPage extends React.Component {
                       New User
                     </button>
                     &nbsp;&nbsp;
-                    <button
-                      type="button"
-                      onClick={() => {
-                        window.location.assign(`/login`);
-                      }}
-                    >
-                      Login
-                    </button>
+                    {sessionUser.username === '#null' ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          window.location.assign(`/login`);
+                        }}
+                      >
+                        Login
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          logoutRequest();
+                        }}
+                      >
+                        Logout
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="user-page-user-data-container">

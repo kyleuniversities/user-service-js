@@ -57,7 +57,7 @@ export async function loadUser(id, setUser) {
  * UPDATE Method
  * Updates a user
  */
-export async function updateUser(id, username, email) {
+export async function updateUser(id, username, email, token) {
   // Set up request body
   const body = {
     username,
@@ -68,6 +68,7 @@ export async function updateUser(id, username, email) {
   const options = {
     method: 'PATCH',
     body: JSON.stringify(body),
+    bearer: token,
   };
 
   // Run request
@@ -80,10 +81,11 @@ export async function updateUser(id, username, email) {
  * DELETE Method
  * Deletes a user
  */
-export async function deleteUser(id) {
+export async function deleteUser(id, token) {
   // Set up request options
   const options = {
     method: 'DELETE',
+    bearer: token,
   };
 
   // Run request

@@ -30,6 +30,7 @@ export const loadSessionUserRequest = async () => {
     const sessionUser = {
       username: decodedToken.sub,
       id: getId(decodedToken),
+      token: session.token,
     };
 
     // Return session user

@@ -1,12 +1,16 @@
 /**
  * Router used for Authentication related services
  */
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { setUpRouterMiddleware, throwError } = require('../util/router-util');
+
+// Set up jwt secret
+const secret = process.env['JWT_SECRET'];
 
 // Set up router middleware
 setUpRouterMiddleware(router);
@@ -37,7 +41,7 @@ function collectSignedSessionToken(user) {
       email: user.email,
       id: user.id,
     },
-    'secret123456'
+    secret
   );
 }
 

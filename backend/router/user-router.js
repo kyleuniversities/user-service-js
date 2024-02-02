@@ -1,12 +1,18 @@
 /**
  * Router used for User related services
  */
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
+const { expressjwt: expressJwt } = require('express-jwt');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const { setUpRouterMiddleware, throwError } = require('../util/router-util');
+
+// Set up jwt secret data
+const secret = process.env['JWT_SECRET'];
+const validateJwt = () => expressJwt({ secret, algorithms: ['HS256'] });
 
 // Set up router middleware
 setUpRouterMiddleware(router);
@@ -66,7 +72,7 @@ router.get(`/:id`, async (req, res) => {
 
 // UPDATE Method
 // Updates a user by id
-router.patch(`/:id`, async (req, res) => {
+router.patch(`/:id`, validateJwt(), async (req, res) => {
   try {
     await User.query()
       .patch(toUserUpdateRequest(req.body))
@@ -80,7 +86,7 @@ router.patch(`/:id`, async (req, res) => {
 
 // DELETE Method
 // Deletes a user by id
-router.delete(`/:id`, async (req, res) => {
+router.delete(`/:id`, validateJwt(), async (req, res) => {
   try {
     await User.query().deleteById(req.params.id);
     return res.send({

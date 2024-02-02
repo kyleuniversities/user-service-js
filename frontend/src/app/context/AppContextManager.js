@@ -7,12 +7,16 @@ export const NULL_USERNAME = '#null';
 // Null user id constant
 export const NULL_ID = '#null';
 
+// Null user token
+export const NULL_TOKEN = '#null';
+
 /**
  * Function for making new null session user
  */
 export const newNullSessionUser = () => ({
   username: NULL_USERNAME,
   id: NULL_ID,
+  token: NULL_TOKEN,
 });
 
 /**
@@ -31,8 +35,9 @@ export class AppContextManager extends React.Component {
   // Constructor Method
   constructor() {
     super();
-    this.setSessionUserFromLoginData =
-      this.setSessionUserFromLoginData.bind(this);
+    this.setSessionUserFromLoginData = this.setSessionUserFromLoginData.bind(
+      this
+    );
     this.removeSessionUserData = this.removeSessionUserData.bind(this);
     this.state = {
       sessionUser: newNullSessionUser(),

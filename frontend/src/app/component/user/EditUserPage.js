@@ -2,6 +2,7 @@ import React from 'react';
 import { SitePage } from '../SitePage';
 import { FormInput, SubmitButton } from '../Form';
 import { NULL_USER, loadUser, updateUser } from '../../service/user';
+import { AppContext } from '../../context/AppContextManager';
 
 /**
  * Page for editing a user account
@@ -47,35 +48,44 @@ export class EditUserPage extends React.Component {
   render() {
     return (
       <SitePage>
-        <div className="user-page-container">
-          <h1>Edit the User "{this.state.user.username}"</h1>
-          <form>
-            <FormInput
-              name="username"
-              label="Username"
-              type="text"
-              value={this.state.user.username}
-              setValue={this.setUsername}
-            />
-            <FormInput
-              name="email"
-              label="Email"
-              type="text"
-              value={this.state.user.email}
-              setValue={this.setEmail}
-            />
-            <br />
-            <SubmitButton
-              onClick={() =>
-                updateUser(
-                  this.state.user.id,
-                  this.state.user.username,
-                  this.state.user.email
-                )
-              }
-            />
-          </form>
-        </div>
+        <AppContext.Consumer>
+          {({
+            sessionUser,
+            setSessionUserFromLoginData,
+            removeSessionUserData,
+          }) => (
+            <div className="user-page-container">
+              <h1>Edit the User "{this.state.user.username}"</h1>
+              <form>
+                <FormInput
+                  name="username"
+                  label="Username"
+                  type="text"
+                  value={this.state.user.username}
+                  setValue={this.setUsername}
+                />
+                <FormInput
+                  name="email"
+                  label="Email"
+                  type="text"
+                  value={this.state.user.email}
+                  setValue={this.setEmail}
+                />
+                <br />
+                <SubmitButton
+                  onClick={() =>
+                    updateUser(
+                      this.state.user.id,
+                      this.state.user.username,
+                      this.state.user.email,
+                      sessionUser.token
+                    )
+                  }
+                />
+              </form>
+            </div>
+          )}
+        </AppContext.Consumer>
       </SitePage>
     );
   }

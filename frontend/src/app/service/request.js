@@ -1,3 +1,4 @@
+import { NULL_TOKEN } from '../context/AppContextManager';
 import { debugAlert } from './debugAlert';
 
 // Default api hosts for requests
@@ -19,9 +20,7 @@ export const deriveApiHost = () => {
  */
 export const request = async (url, options = {}) => {
   // Set up headers
-  const headers = {
-    'Content-Type': 'application/json',
-  };
+  const headers = collectHeaders(options);
 
   // Set up API request parameters
   const fullOptions = {
@@ -64,4 +63,20 @@ export const fullRequest = async (fullUrl, fullOptions) => {
       // Return the data from the response
       return data;
     });
+};
+
+// Function for deriving request headers
+const collectHeaders = (options) => {
+  // Set up headers
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  // Add bearer to headers if it is within options
+  if ('bearer' in options && options.bearer !== NULL_TOKEN) {
+    headers['Authorization'] = `Bearer ${options.bearer}`;
+  }
+
+  // Return collected headers
+  return headers;
 };

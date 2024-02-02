@@ -77,7 +77,7 @@ export class ViewUsersPage extends React.Component {
               <br />
               <br />
               {this.state.users.map((user) => (
-                <ViewUserCard user={user} />
+                <ViewUserCard user={user} sessionUser={sessionUser} />
               ))}
             </div>
           )}
@@ -100,7 +100,12 @@ export class ViewUserCard extends React.Component {
         <p>
           <b>Email:</b> {this.props.user.email}
         </p>
-        <ViewUserCardControlContainer user={this.props.user} />
+        {this.props.sessionUser.username === this.props.user.username && (
+          <ViewUserCardControlContainer
+            user={this.props.user}
+            sessionUser={this.props.sessionUser}
+          />
+        )}
       </div>
     );
   }
@@ -122,7 +127,12 @@ export class ViewUserCardControlContainer extends React.Component {
           Edit User
         </button>
         &nbsp;&nbsp;
-        <button type="button" onClick={() => deleteUser(this.props.user.id)}>
+        <button
+          type="button"
+          onClick={() =>
+            deleteUser(this.props.user.id, this.props.sessionUser.token)
+          }
+        >
           Delete User
         </button>
       </div>
